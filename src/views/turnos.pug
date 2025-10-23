@@ -181,6 +181,7 @@ html(lang='es')
         border: 1px solid #cbd5e0;
         border-radius: 5px;
         font-size: 16px;
+        box-sizing: border-box; /* Añadido para consistencia de tamaño */
       }
       .form-group input:focus, .form-group select:focus {
         outline: none;
@@ -196,6 +197,8 @@ html(lang='es')
         font-size: 16px;
         cursor: pointer;
         transition: background 0.3s ease;
+        margin-top: 10px;
+        margin-bottom: 10px;
       }
       .submit-button:hover {
         background: #0b4fa0;
@@ -306,16 +309,16 @@ html(lang='es')
             i.fas.fa-search
             | Consultar Turnos
           button.submit-button(onclick='getAllTurnos()') Ver Todos los Turnos
-          .form-group
+          .form-group(style='margin-top: 20px;')
             label(for='searchFecha') Buscar por Fecha:
             input(type='date' id='searchFecha' name='searchFecha')
             button.submit-button(onclick='getTurnosByFecha()') Buscar
-          .form-group
+          .form-group(style='margin-top: 20px;')
             label(for='searchPaciente') Buscar por Paciente:
             select(id='searchPaciente' name='searchPaciente')
               option(value='') Seleccionar paciente...
             button.submit-button(onclick='getTurnosByPaciente()') Buscar
-          .form-group
+          .form-group(style='margin-top: 20px;')
             label(for='searchMedico') Buscar por Médico:
             select(id='searchMedico' name='searchMedico')
               option(value='') Seleccionar médico...
