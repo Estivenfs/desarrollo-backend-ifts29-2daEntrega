@@ -99,6 +99,18 @@ const pacienteController = {
     async delete(req, res) {
         try {
             const { id } = req.params;
+
+            // Verificar si el paciente tiene turnos asignados
+            const turnos = await DatabaseService.getAll("turnos");
+            const tieneTurnos = turnos.some(turno => turno.IdPaciente == id);
+
+            if (tieneTurnos) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'No se puede eliminar el paciente porque tiene turnos asignados.'
+                });
+            }
+
             const eliminado = await DatabaseService.delete("pacientes", id);
             
             if (!eliminado) {
