@@ -1,10 +1,11 @@
 import { Paciente } from '../models/index.js';
+import DatabaseService from '../models/DatabaseService.js';
 
 const pacienteController = {
     // GET /api/pacientes - Obtener todos los pacientes
     async getAll(req, res) {
         try {
-            const pacientes = await Paciente.getAll();
+            const pacientes = await DatabaseService.getAll("pacientes");
             res.status(200).json({
                 success: true,
                 data: pacientes,
@@ -23,7 +24,7 @@ const pacienteController = {
     async getById(req, res) {
         try {
             const { id } = req.params;
-            const paciente = await Paciente.getById(id);
+            const paciente = await DatabaseService.getById("pacientes", id);
             
             if (!paciente) {
                 return res.status(404).json({
@@ -49,7 +50,7 @@ const pacienteController = {
     async create(req, res) {
         try {
             const pacienteData = req.body;
-            const nuevoPaciente = await Paciente.create(pacienteData);
+            const nuevoPaciente = await DatabaseService.create("pacientes", pacienteData);
             
             res.status(201).json({
                 success: true,
@@ -71,7 +72,7 @@ const pacienteController = {
             const { id } = req.params;
             const pacienteData = req.body;
             
-            const pacienteActualizado = await Paciente.update(id, pacienteData);
+            const pacienteActualizado = await DatabaseService.update("pacientes", id, pacienteData);
             
             res.status(200).json({
                 success: true,
@@ -98,7 +99,7 @@ const pacienteController = {
     async delete(req, res) {
         try {
             const { id } = req.params;
-            const eliminado = await Paciente.delete(id);
+            const eliminado = await DatabaseService.delete("pacientes", id);
             
             if (!eliminado) {
                 return res.status(404).json({
@@ -124,7 +125,7 @@ const pacienteController = {
     async getByDNI(req, res) {
         try {
             const { dni } = req.params;
-            const paciente = await Paciente.getByDNI(dni);
+            const paciente = await DatabaseService.getByDNI("pacientes", dni);
             
             if (!paciente) {
                 return res.status(404).json({
@@ -150,7 +151,7 @@ const pacienteController = {
     async getByObraSocial(req, res) {
         try {
             const { obraSocial } = req.params;
-            const pacientes = await Paciente.getByObraSocial(obraSocial);
+            const pacientes = await DatabaseService.getByField("pacientes", "ObraSocial", obraSocial);
             
             res.status(200).json({
                 success: true,

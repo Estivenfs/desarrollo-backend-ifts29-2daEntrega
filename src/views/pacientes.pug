@@ -259,8 +259,9 @@ html(lang='es')
       .form-section#delete-form
         h3 🗑️ Eliminar Paciente
         .form-group
-          label(for='deleteId') ID del Paciente:
-          input(type='number' id='deleteId' name='deleteId' required)
+          label(for='deleteId') Seleccionar Paciente:
+          select(id='deleteId' name='deleteId' required)
+            option(value='') Seleccionar paciente...
           button.submit-button(onclick='deletePaciente()') Eliminar Paciente
         .result#delete-result
 
@@ -275,7 +276,10 @@ html(lang='es')
         
         // Cargar pacientes en el desplegable si es el formulario de modificar
         if (formType === 'update') {
-          loadPacientesDropdown();
+          loadPacientesDropdown('updatePacienteSelect');
+        }
+        if (formType === 'delete') {
+          loadPacientesDropdown('deleteId');
         }
         
         // Limpiar resultados
@@ -315,7 +319,7 @@ html(lang='es')
           
           const result = await response.json();
           if (response.ok) {
-            showResult('create-result', `✅ Paciente creado exitosamente. ID: ${result.data.IdPaciente}`, true);
+            showResult('create-result', `✅ Paciente creado exitosamente. ID: ${result.data._id}`, true);
             event.target.reset();
           } else {
             showResult('create-result', `❌ Error: ${result.message}`, false);
@@ -333,7 +337,7 @@ html(lang='es')
           if (response.ok) {
             let html = '<h4>📋 Lista de Pacientes:</h4>';
             result.data.forEach(paciente => {
-              html += `<p><strong>ID:</strong> ${paciente.IdPaciente} | <strong>Nombre:</strong> ${paciente.Nombre} ${paciente.Apellido} | <strong>DNI:</strong> ${paciente.DNI} | <strong>Obra Social:</strong> ${paciente.ObraSocial}</p>`;
+              html += `<p><strong>ID:</strong> ${paciente._id} | <strong>Nombre:</strong> ${paciente.Nombre} ${paciente.Apellido} | <strong>DNI:</strong> ${paciente.DNI} | <strong>Obra Social:</strong> ${paciente.ObraSocial}</p>`;
             });
             showResult('read-result', html, true);
           } else {
@@ -358,7 +362,7 @@ html(lang='es')
           if (response.ok) {
             const p = result.data;
             const html = `<h4>👤 Paciente Encontrado:</h4>
-                         <p><strong>ID:</strong> ${p.IdPaciente}</p>
+                         <p><strong>ID:</strong> ${p._id}</p>
                          <p><strong>Nombre:</strong> ${p.Nombre} ${p.Apellido}</p>
                          <p><strong>DNI:</strong> ${p.DNI}</p>
                          <p><strong>Edad:</strong> ${p.Edad} años</p>
@@ -374,18 +378,18 @@ html(lang='es')
         }
       }
 
-      async function loadPacientesDropdown() {
+      async function loadPacientesDropdown(idSelect) {
         try {
           const response = await fetch('/api/pacientes');
           const result = await response.json();
           
           if (response.ok) {
-            const select = document.getElementById('updatePacienteSelect');
+            const select = document.getElementById(idSelect);
             select.innerHTML = '<option value="">Seleccionar paciente...</option>';
             
             result.data.forEach(paciente => {
               const option = document.createElement('option');
-              option.value = paciente.IdPaciente;
+              option.value = paciente._id;
               option.textContent = `${paciente.Nombre} ${paciente.Apellido} - DNI: ${paciente.DNI}`;
               select.appendChild(option);
             });
