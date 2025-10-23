@@ -64,8 +64,8 @@ const medicoSchema = new mongoose.Schema({
 
 // --- Esquema de Turno ---
 const turnoSchema = new mongoose.Schema({
-    Paciente: { type: mongoose.Schema.Types.ObjectId, ref: 'Paciente', required: true }, // Referencia al Paciente
-    Medico: { type: mongoose.Schema.Types.ObjectId, ref: 'Medico', required: true },     // Referencia al Médico
+    IdPaciente: { type: mongoose.Schema.Types.ObjectId, ref: 'Paciente', required: true }, // Referencia al Paciente
+    IdMedico: { type: mongoose.Schema.Types.ObjectId, ref: 'Medico', required: true },     // Referencia al Médico
     Fecha: { type: Date, required: true },
     HoraInicio: { type: String, required: true },
     HoraFin: { type: String, required: true },

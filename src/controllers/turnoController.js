@@ -1,10 +1,11 @@
-import { Turno } from '../models/index.js';
+import Turno  from '../models/Turno.js';
+import DatabaseService from '../models/DatabaseService.js';
 
 const turnoController = {
     // GET /api/turnos - Obtener todos los turnos
     async getAll(req, res) {
         try {
-            const turnos = await Turno.getAll();
+            const turnos = await DatabaseService.getAll("turnos");
             res.status(200).json({
                 success: true,
                 data: turnos,
@@ -23,7 +24,7 @@ const turnoController = {
     async getById(req, res) {
         try {
             const { id } = req.params;
-            const turno = await Turno.getById(id);
+            const turno = await DatabaseService.getById("turnos", id);
             
             if (!turno) {
                 return res.status(404).json({
@@ -49,8 +50,16 @@ const turnoController = {
     async create(req, res) {
         try {
             const turnoData = req.body;
-            const nuevoTurno = await Turno.create(turnoData);
+            const available = await Turno.createAvailable(turnoData);
             
+            if (!available.success) {
+                return res.status(400).json({
+                    success: false,
+                    message: available.message,
+                    errors: available.errors
+                });
+            }
+            const nuevoTurno = await DatabaseService.create('turnos', turnoData);
             res.status(201).json({
                 success: true,
                 message: 'Turno creado exitosamente',
@@ -70,8 +79,24 @@ const turnoController = {
         try {
             const { id } = req.params;
             const turnoData = req.body;
+            const valid = await Turno.validate(turnoData);
             
-            const turnoActualizado = await Turno.update(id, turnoData);
+            if (!valid.success) {
+                return res.status(400).json({
+                    success: false,
+                    message: valid.message,
+                    errors: valid.errors
+                });
+            }
+            
+            const turnoActualizado = await DatabaseService.update('turnos', id, turnoData);
+            
+            if (!turnoActualizado) {
+                return res.status(404).json({
+                    success: false,
+                    message: 'Turno no encontrado'
+                });
+            }
             
             res.status(200).json({
                 success: true,

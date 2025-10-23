@@ -233,8 +233,9 @@ html(lang='es')
       .form-section#update-form
         h3 ✏️ Modificar Turno
         .form-group
-          label(for='updateId') ID del Turno:
-          input(type='number' id='updateId' name='updateId' required)
+          label(for='updateTurnoSelect') Seleccionar Turno:
+          select(id='updateTurnoSelect' name='updateTurnoSelect' required)
+            option(value='') Seleccionar turno...
           button.submit-button(onclick='loadTurnoData()') Cargar Datos
         form(onsubmit='updateTurno(event)' style='display:none' id='update-data-form')
           .form-group
@@ -276,6 +277,7 @@ html(lang='es')
         loadPacientes();
         loadMedicos();
         setMinDateTime();
+        loadTurnosDropdown('updateTurnoSelect');
       };
 
       function setMinDateTime() {
@@ -338,7 +340,7 @@ html(lang='es')
             
             pacientes.forEach(paciente => {
               const option = document.createElement('option');
-              option.value = paciente.IdPaciente;
+              option.value = paciente._id;
               option.textContent = `${paciente.Nombre} ${paciente.Apellido} (DNI: ${paciente.DNI})`;
               select.appendChild(option);
             });
@@ -360,7 +362,7 @@ html(lang='es')
             
             medicos.forEach(medico => {
               const option = document.createElement('option');
-              option.value = medico.IdMedico;
+              option.value = medico._id;
               option.textContent = `${medico.Nombre} ${medico.Apellido} (${medico.Especialidad})`;
               select.appendChild(option);
             });
@@ -403,14 +405,12 @@ html(lang='es')
         }
         
         // Validar fecha y hora
-        if (!validateDateTime(data.fecha, data.horaInicio)) {
+        if (!validateDateTime(data.Fecha, data.HoraInicio)) {
           showResult('create-result', '❌ La fecha y hora del turno deben ser posteriores al momento actual', false);
           return;
         }
         
-        // Convertir IDs a números
-        data.idPaciente = parseInt(data.idPaciente);
-        data.idMedico = parseInt(data.idMedico);
+       
         
         try {
           const response = await fetch('/api/turnos', {
@@ -421,7 +421,7 @@ html(lang='es')
           
           const result = await response.json();
           if (response.ok) {
-            showResult('create-result', `✅ Turno creado exitosamente. ID: ${result.data.IdTurno}`, true);
+            showResult('create-result', `✅ Turno creado exitosamente. ID: ${result.data._id}`, true);
             event.target.reset();
           } else {
             showResult('create-result', `❌ Error: ${result.message}`, false);
@@ -439,9 +439,9 @@ html(lang='es')
           if (response.ok) {
             let html = '<h4>📋 Lista de Turnos:</h4>';
             result.data.forEach(turno => {
-              const paciente = pacientes.find(p => p.IdPaciente === turno.IdPaciente);
-              const medico = medicos.find(m => m.IdMedico === turno.IdMedico);
-              html += `<p><strong>ID:</strong> ${turno.IdTurno} | <strong>Fecha:</strong> ${turno.Fecha} | <strong>Hora:</strong> ${turno.HoraInicio}-${turno.HoraFin} | <strong>Paciente:</strong> ${paciente ? paciente.Nombre + ' ' + paciente.Apellido : 'N/A'} | <strong>Médico:</strong> ${medico ? medico.Nombre + ' ' + medico.Apellido : 'N/A'}</p>`;
+              const paciente = pacientes.find(p => p._id === turno.IdPaciente);
+              const medico = medicos.find(m => m._id === turno.IdMedico);
+              html += `<p><strong>ID:</strong> ${turno._id} | <strong>Fecha:</strong> ${turno.Fecha} | <strong>Hora:</strong> ${turno.HoraInicio}-${turno.HoraFin} | <strong>Paciente:</strong> ${paciente ? paciente.Nombre + ' ' + paciente.Apellido : 'N/A'} | <strong>Médico:</strong> ${medico ? medico.Nombre + ' ' + medico.Apellido : 'N/A'}</p>`;
             });
             showResult('read-result', html, true);
           } else {
@@ -466,9 +466,9 @@ html(lang='es')
           if (response.ok) {
             let html = `<h4>📅 Turnos del ${fecha}:</h4>`;
             result.data.forEach(turno => {
-              const paciente = pacientes.find(p => p.IdPaciente === turno.IdPaciente);
-              const medico = medicos.find(m => m.IdMedico === turno.IdMedico);
-              html += `<p><strong>ID:</strong> ${turno.IdTurno} | <strong>Hora:</strong> ${turno.HoraInicio}-${turno.HoraFin} | <strong>Paciente:</strong> ${paciente ? paciente.Nombre + ' ' + paciente.Apellido : 'N/A'} | <strong>Médico:</strong> ${medico ? medico.Nombre + ' ' + medico.Apellido : 'N/A'}</p>`;
+              const paciente = pacientes.find(p => p._id === turno.IdPaciente);
+              const medico = medicos.find(m => m._id === turno.IdMedico);
+              html += `<p><strong>ID:</strong> ${turno._id} | <strong>Hora:</strong> ${turno.HoraInicio}-${turno.HoraFin} | <strong>Paciente:</strong> ${paciente ? paciente.Nombre + ' ' + paciente.Apellido : 'N/A'} | <strong>Médico:</strong> ${medico ? medico.Nombre + ' ' + medico.Apellido : 'N/A'}</p>`;
             });
             showResult('read-result', html, true);
           } else {
@@ -491,11 +491,11 @@ html(lang='es')
           const result = await response.json();
           
           if (response.ok) {
-            const paciente = pacientes.find(p => p.IdPaciente == idPaciente);
+            const paciente = pacientes.find(p => p._id == idPaciente);
             let html = `<h4>🏥 Turnos de ${paciente ? paciente.Nombre + ' ' + paciente.Apellido : 'Paciente'}:</h4>`;
             result.data.forEach(turno => {
-              const medico = medicos.find(m => m.IdMedico === turno.IdMedico);
-              html += `<p><strong>ID:</strong> ${turno.IdTurno} | <strong>Fecha:</strong> ${turno.Fecha} | <strong>Hora:</strong> ${turno.HoraInicio}-${turno.HoraFin} | <strong>Médico:</strong> ${medico ? medico.Nombre + ' ' + medico.Apellido : 'N/A'}</p>`;
+              const medico = medicos.find(m => m._id === turno.IdMedico);
+              html += `<p><strong>ID:</strong> ${turno._id} | <strong>Fecha:</strong> ${turno.Fecha} | <strong>Hora:</strong> ${turno.HoraInicio}-${turno.HoraFin} | <strong>Médico:</strong> ${medico ? medico.Nombre + ' ' + medico.Apellido : 'N/A'}</p>`;
             });
             showResult('read-result', html, true);
           } else {
@@ -518,11 +518,11 @@ html(lang='es')
           const result = await response.json();
           
           if (response.ok) {
-            const medico = medicos.find(m => m.IdMedico == idMedico);
+            const medico = medicos.find(m => m._id == idMedico);
             let html = `<h4>👨‍⚕️ Turnos de ${medico ? medico.Nombre + ' ' + medico.Apellido : 'Médico'}:</h4>`;
             result.data.forEach(turno => {
-              const paciente = pacientes.find(p => p.IdPaciente === turno.IdPaciente);
-              html += `<p><strong>ID:</strong> ${turno.IdTurno} | <strong>Fecha:</strong> ${turno.Fecha} | <strong>Hora:</strong> ${turno.HoraInicio}-${turno.HoraFin} | <strong>Paciente:</strong> ${paciente ? paciente.Nombre + ' ' + paciente.Apellido : 'N/A'}</p>`;
+              const paciente = pacientes.find(p => p._id === turno.IdPaciente);
+              html += `<p><strong>ID:</strong> ${turno._id} | <strong>Fecha:</strong> ${turno.Fecha} | <strong>Hora:</strong> ${turno.HoraInicio}-${turno.HoraFin} | <strong>Paciente:</strong> ${paciente ? paciente.Nombre + ' ' + paciente.Apellido : 'N/A'}</p>`;
             });
             showResult('read-result', html, true);
           } else {
@@ -559,6 +559,36 @@ html(lang='es')
           }
         } catch (error) {
           showResult('update-result', `❌ Error de conexión: ${error.message}`, false);
+        }
+      }
+
+      async function loadTurnosDropdown(idSelect) {
+        try {
+          const response = await fetch('/api/turnos');
+          const result = await response.json();
+          let turnos = result.data;
+          //agrego a turnos los nombres de medicos y pacientes
+          turnos.forEach(turno => {
+            const medico = medicos.find(m => m._id === turno.IdMedico);
+            const paciente = pacientes.find(p => p._id === turno.IdPaciente);
+            turno.NombreMedico = medico ? medico.Nombre + ' ' + medico.Apellido : 'N/A';
+            turno.NombrePaciente = paciente ? paciente.Nombre + ' ' + paciente.Apellido : 'N/A';
+          });
+          console.log(turnos);
+          
+          if (response.ok) {
+            const select = document.getElementById(idSelect);
+            select.innerHTML = '<option value="">Seleccionar turno...</option>';
+            
+            turnos.forEach(turno => {
+              const option = document.createElement('option');
+              option.value = turno._id;
+              option.textContent = `${turno.Fecha} ${turno.HoraInicio}-${turno.HoraFin} ${turno.NombreMedico} - ${turno.NombrePaciente}`;
+              select.appendChild(option);
+            });
+          }
+        } catch (error) {
+          console.error('Error cargando turnos:', error);
         }
       }
 

@@ -56,7 +56,7 @@ class Turno {
         if (!this.IdPaciente) {
             errors.push('El ID del paciente es requerido');
         } else {
-            const paciente = await Paciente.getById(this.IdPaciente);
+            const paciente = await DatabaseService.getById('pacientes', this.IdPaciente);
             if (!paciente) {
                 errors.push('El paciente especificado no existe');
             }
@@ -66,7 +66,7 @@ class Turno {
         if (!this.IdMedico) {
             errors.push('El ID del médico es requerido');
         } else {
-            const medico = await Medico.getById(this.IdMedico);
+            const medico = await DatabaseService.getById('medicos', this.IdMedico);
             if (!medico) {
                 errors.push('El médico especificado no existe');
             }
@@ -114,21 +114,33 @@ class Turno {
         return await DatabaseService.getById('turnos', id);
     }
 
-    static async create(turnoData) {
+    static async createAvailable(turnoData) {
         const turno = new Turno(turnoData);
         const validation = await turno.validate();
         
         if (!validation.isValid) {
-            throw new Error(`Datos inválidos: ${validation.errors.join(', ')}`);
+            return {
+                success: false,
+                message: 'Datos inválidos',
+                errors: validation.errors
+            };
         }
 
         // Verificar conflictos de horario
         const conflicto = await this.checkConflicto(turno.Fecha, turno.HoraInicio, turno.HoraFin, turno.IdMedico);
         if (conflicto) {
-            throw new Error('El médico ya tiene un turno asignado en ese horario');
+            return {
+                success: false,
+                message: 'El médico ya tiene un turno asignado en ese horario',
+                errors: [conflicto]
+            };
         }
 
-        return await DatabaseService.create('turnos', turno.toJSON());
+        return {
+            success: true,
+            message: 'El turno se puede crear',
+            errors: []
+        };
     }
 
     static async update(id, turnoData) {
@@ -165,7 +177,7 @@ class Turno {
 
     // Verificar conflictos de horario
     static async checkConflicto(fecha, horaInicio, horaFin, idMedico, excludeId = null) {
-        const turnos = await this.getAll();
+        const turnos = await DatabaseService.getAll('turnos');
         
         return turnos.some(turno => {
             // Excluir el turno actual si se está editando
