@@ -273,88 +273,99 @@ html(lang='es')
             i.icon.fas.fa-trash-alt
             | Eliminar Turno
       
-      // Formulario Crear Turno
-      .form-section#create-form
-        h3 ➕ Crear Nuevo Turno
-        form(onsubmit='createTurno(event)')
-          .form-group
-            label(for='fecha') Fecha:
-            input(type='date' id='fecha' name='fecha' required)
-          .form-row
+        // Formulario Crear Turno
+        .form-section#create-form
+          h3
+            i.fas.fa-plus-circle
+            | Crear Nuevo Turno
+          form(onsubmit='createTurno(event)')
             .form-group
-              label(for='horaInicio') Hora de Inicio:
-              input(type='time' id='horaInicio' name='horaInicio' required)
+              label(for='fecha') Fecha:
+              input(type='date' id='fecha' name='fecha' required)
+            .form-row
+              .form-group
+                label(for='horaInicio') Hora de Inicio:
+                input(type='time' id='horaInicio' name='horaInicio' required)
+              .form-group
+                label(for='horaFin') Hora de Fin:
+                input(type='time' id='horaFin' name='horaFin' required)
             .form-group
-              label(for='horaFin') Hora de Fin:
-              input(type='time' id='horaFin' name='horaFin' required)
+              label(for='idPaciente') Paciente:
+              select(id='idPaciente' name='idPaciente' required)
+                option(value='') Seleccionar paciente...
+            .form-group
+              label(for='idMedico') Médico:
+              select(id='idMedico' name='idMedico' required)
+                option(value='') Seleccionar médico...
+            button.submit-button(type='submit') Crear Turno
+          .result#create-result
+        
+        // Formulario Consultar Turnos
+        .form-section#read-form
+          h3
+            i.fas.fa-search
+            | Consultar Turnos
+          button.submit-button(onclick='getAllTurnos()') Ver Todos los Turnos
           .form-group
-            label(for='idPaciente') Paciente:
-            select(id='idPaciente' name='idPaciente' required)
+            label(for='searchFecha') Buscar por Fecha:
+            input(type='date' id='searchFecha' name='searchFecha')
+            button.submit-button(onclick='getTurnosByFecha()') Buscar
+          .form-group
+            label(for='searchPaciente') Buscar por Paciente:
+            select(id='searchPaciente' name='searchPaciente')
               option(value='') Seleccionar paciente...
+            button.submit-button(onclick='getTurnosByPaciente()') Buscar
           .form-group
-            label(for='idMedico') Médico:
-            select(id='idMedico' name='idMedico' required)
+            label(for='searchMedico') Buscar por Médico:
+            select(id='searchMedico' name='searchMedico')
               option(value='') Seleccionar médico...
-          button.submit-button(type='submit') Crear Turno
-        .result#create-result
-      
-      // Formulario Consultar Turnos
-      .form-section#read-form
-        h3 👁️ Consultar Turnos
-        button.submit-button(onclick='getAllTurnos()') Ver Todos los Turnos
-        .form-group
-          label(for='searchFecha') Buscar por Fecha:
-          input(type='date' id='searchFecha' name='searchFecha')
-          button.submit-button(onclick='getTurnosByFecha()') Buscar
-        .form-group
-          label(for='searchPaciente') Buscar por Paciente:
-          select(id='searchPaciente' name='searchPaciente')
-            option(value='') Seleccionar paciente...
-          button.submit-button(onclick='getTurnosByPaciente()') Buscar
-        .form-group
-          label(for='searchMedico') Buscar por Médico:
-          select(id='searchMedico' name='searchMedico')
-            option(value='') Seleccionar médico...
-          button.submit-button(onclick='getTurnosByMedico()') Buscar
-        .result#read-result
-      
-      // Formulario Modificar Turno
-      .form-section#update-form
-        h3 ✏️ Modificar Turno
-        .form-group
-          label(for='updateId') ID del Turno:
-          input(type='number' id='updateId' name='updateId' required)
-          button.submit-button(onclick='loadTurnoData()') Cargar Datos
-        form(onsubmit='updateTurno(event)' style='display:none' id='update-data-form')
+            button.submit-button(onclick='getTurnosByMedico()') Buscar
+          .result#read-result
+        
+        // Formulario Modificar Turno (CAMBIADO POR EL MERGE)
+        .form-section#update-form
+          h3
+            i.fas.fa-edit
+            | Modificar Turno
           .form-group
-            label(for='updateFecha') Fecha:
-            input(type='date' id='updateFecha' name='updateFecha' required)
-          .form-row
+            // --- INICIO DEL CAMBIO ---
+            label(for='updateTurnoSelect') Seleccionar Turno:
+            select(id='updateTurnoSelect' name='updateTurnoSelect' required)
+              option(value='') Seleccionar turno...
+            // --- FIN DEL CAMBIO ---
+            button.submit-button(onclick='loadTurnoData()') Cargar Datos
+          form(onsubmit='updateTurno(event)' style='display:none' id='update-data-form')
             .form-group
-              label(for='updateHoraInicio') Hora de Inicio:
-              input(type='time' id='updateHoraInicio' name='updateHoraInicio' required)
+              label(for='updateFecha') Fecha:
+              input(type='date' id='updateFecha' name='updateFecha' required)
+            .form-row
+              .form-group
+                label(for='updateHoraInicio') Hora de Inicio:
+                input(type='time' id='updateHoraInicio' name='updateHoraInicio' required)
+              .form-group
+                label(for='updateHoraFin') Hora de Fin:
+                input(type='time' id='updateHoraFin' name='updateHoraFin' required)
             .form-group
-              label(for='updateHoraFin') Hora de Fin:
-              input(type='time' id='updateHoraFin' name='updateHoraFin' required)
+              label(for='updateIdPaciente') Paciente:
+              select(id='updateIdPaciente' name='updateIdPaciente' required)
+                option(value='') Seleccionar paciente...
+            .form-group
+              label(for='updateIdMedico') Médico:
+              select(id='updateIdMedico' name='updateIdMedico' required)
+                option(value='') Seleccionar médico...
+            button.submit-button(type='submit') Actualizar Turno
+          .result#update-result
+        
+        // Formulario Eliminar Turno (Sin cambios)
+        .form-section#delete-form
+          h3
+            i.fas.fa-trash-alt
+            | Eliminar Turno
           .form-group
-            label(for='updateIdPaciente') Paciente:
-            select(id='updateIdPaciente' name='updateIdPaciente' required)
-              option(value='') Seleccionar paciente...
-          .form-group
-            label(for='updateIdMedico') Médico:
-            select(id='updateIdMedico' name='updateIdMedico' required)
-              option(value='') Seleccionar médico...
-          button.submit-button(type='submit') Actualizar Turno
-        .result#update-result
-      
-      // Formulario Eliminar Turno
-      .form-section#delete-form
-        h3 🗑️ Eliminar Turno
-        .form-group
-          label(for='deleteId') ID del Turno:
-          input(type='number' id='deleteId' name='deleteId' required)
-          button.submit-button(onclick='deleteTurno()') Eliminar Turno
-        .result#delete-result
+            label(for='deleteId') ID del Turno:
+            input(type='number' id='deleteId' name='deleteId' placeholder='Ingrese ID del turno' required)
+            button.submit-button(onclick='deleteTurno()') Eliminar Turno
+          .result#delete-result
 
     // --- Script de la página de Turnos (modificado para íconos y IDs robustos) ---
     script.
@@ -366,7 +377,9 @@ html(lang='es')
         loadPacientes();
         loadMedicos();
         setMinDateTime();
-        loadTurnosDropdown('updateTurnoSelect');
+        // --- INICIO DEL CAMBIO ---
+        loadTurnosDropdown('updateTurnoSelect'); // Cargar el nuevo dropdown
+        // --- FIN DEL CAMBIO ---
       };
 
       function setMinDateTime() {
@@ -430,7 +443,7 @@ html(lang='es')
             pacientes.forEach(paciente => {
               const id = paciente._id || paciente.IdPaciente; // Maneja MongoDB y SQL
               const option = document.createElement('option');
-              option.value = paciente.IdPaciente;
+              option.value = id;
               option.textContent = `${paciente.Nombre} ${paciente.Apellido} (DNI: ${paciente.DNI})`;
               select.appendChild(option);
             });
@@ -453,13 +466,40 @@ html(lang='es')
             medicos.forEach(medico => {
               const id = medico._id || medico.IdMedico; // Maneja MongoDB y SQL
               const option = document.createElement('option');
-              option.value = medico.IdMedico;
+              option.value = id;
               option.textContent = `${medico.Nombre} ${medico.Apellido} (${medico.Especialidad})`;
               select.appendChild(option);
             });
           }
         });
       }
+
+      // --- INICIO DEL CAMBIO ---
+      // Nueva función para cargar el dropdown de turnos (mejorada)
+      async function loadTurnosDropdown(idSelect) {
+        try {
+          // Usamos el endpoint 'completos' para tener los nombres
+          const response = await fetch('/api/turnos/completos');
+          const result = await response.json();
+          
+          if (response.ok) {
+            const select = document.getElementById(idSelect);
+            select.innerHTML = '<option value="">Seleccionar turno...</option>';
+            
+            result.data.forEach(turno => {
+              const id = turno._id || turno.IdTurno;
+              const option = document.createElement('option');
+              option.value = id;
+              const fechaFmt = new Date(turno.Fecha.replace(/-/g, '/')).toLocaleDateString('es-AR');
+              option.textContent = `${fechaFmt} ${turno.HoraInicio} - ${turno.Paciente || 'N/A'} (Médico: ${turno.Medico || 'N/A'})`;
+              select.appendChild(option);
+            });
+          }
+        } catch (error) {
+          console.error('Error cargando turnos:', error);
+        }
+      }
+      // --- FIN DEL CAMBIO ---
 
       function showForm(formType) {
         // Ocultar todos los formularios
@@ -498,14 +538,14 @@ html(lang='es')
         }
         
         // Validar fecha y hora
-        if (!validateDateTime(data.fecha, data.horaInicio)) {
-          showResult('create-result', '❌ La fecha y hora del turno deben ser posteriores al momento actual', false);
+        if (!validateDateTime(data.Fecha, data.HoraInicio)) {
+          showResult('create-result', 'La fecha y hora del turno deben ser posteriores al momento actual', false);
           return;
         }
         
-        // Convertir IDs a números
-        data.idPaciente = parseInt(data.idPaciente);
-        data.idMedico = parseInt(data.idMedico);
+        // Convertir IDs a números (asumiendo que el ID es numérico)
+        data.IdPaciente = parseInt(data.IdPaciente);
+        data.IdMedico = parseInt(data.IdMedico);
         
         try {
           const response = await fetch('/api/turnos', {
@@ -516,8 +556,10 @@ html(lang='es')
           
           const result = await response.json();
           if (response.ok) {
-            showResult('create-result', `✅ Turno creado exitosamente. ID: ${result.data.IdTurno}`, true);
+            const id = result.data._id || result.data.IdTurno;
+            showResult('create-result', `Turno creado exitosamente. ID: ${id}`, true);
             event.target.reset();
+            loadTurnosDropdown('updateTurnoSelect'); // Recargar dropdown
           } else {
             showResult('create-result', `Error: ${result.message}`, false);
           }
@@ -535,9 +577,8 @@ html(lang='es')
           if (response.ok) {
             let html = '<h4><i class="fas fa-clipboard-list"></i> Lista de Turnos:</h4>';
             result.data.forEach(turno => {
-              const paciente = pacientes.find(p => p.IdPaciente === turno.IdPaciente);
-              const medico = medicos.find(m => m.IdMedico === turno.IdMedico);
-              html += `<p><strong>ID:</strong> ${turno.IdTurno} | <strong>Fecha:</strong> ${turno.Fecha} | <strong>Hora:</strong> ${turno.HoraInicio}-${turno.HoraFin} | <strong>Paciente:</strong> ${paciente ? paciente.Nombre + ' ' + paciente.Apellido : 'N/A'} | <strong>Médico:</strong> ${medico ? medico.Nombre + ' ' + medico.Apellido : 'N/A'}</p>`;
+              const id = turno._id || turno.IdTurno;
+              html += `<p><strong>ID:</strong> ${id} | <strong>Fecha:</strong> ${new Date(turno.Fecha.replace(/-/g, '/')).toLocaleDateString('es-AR')} | <strong>Hora:</strong> ${turno.HoraInicio}-${turno.HoraFin} | <strong>Paciente:</strong> ${turno.Paciente || 'N/A'} | <strong>Médico:</strong> ${turno.Medico || 'N/A'}</p>`;
             });
             showResult('read-result', html, true);
           } else {
@@ -565,9 +606,11 @@ html(lang='es')
               html += '<p>No hay turnos para esta fecha.</p>';
             }
             result.data.forEach(turno => {
-              const paciente = pacientes.find(p => p.IdPaciente === turno.IdPaciente);
-              const medico = medicos.find(m => m.IdMedico === turno.IdMedico);
-              html += `<p><strong>ID:</strong> ${turno.IdTurno} | <strong>Hora:</strong> ${turno.HoraInicio}-${turno.HoraFin} | <strong>Paciente:</strong> ${paciente ? paciente.Nombre + ' ' + paciente.Apellido : 'N/A'} | <strong>Médico:</strong> ${medico ? medico.Nombre + ' ' + medico.Apellido : 'N/A'}</p>`;
+              // Buscar en los arrays cargados
+              const paciente = pacientes.find(p => (p._id || p.IdPaciente) == turno.IdPaciente);
+              const medico = medicos.find(m => (m._id || m.IdMedico) == turno.IdMedico);
+              const id = turno._id || turno.IdTurno;
+              html += `<p><strong>ID:</strong> ${id} | <strong>Hora:</strong> ${turno.HoraInicio}-${turno.HoraFin} | <strong>Paciente:</strong> ${paciente ? paciente.Nombre + ' ' + paciente.Apellido : 'N/A'} | <strong>Médico:</strong> ${medico ? medico.Nombre + ' ' + medico.Apellido : 'N/A'}</p>`;
             });
             showResult('read-result', html, true);
           } else {
@@ -590,11 +633,15 @@ html(lang='es')
           const result = await response.json();
           
           if (response.ok) {
-            const paciente = pacientes.find(p => p.IdPaciente == idPaciente);
-            let html = `<h4>🏥 Turnos de ${paciente ? paciente.Nombre + ' ' + paciente.Apellido : 'Paciente'}:</h4>`;
+            const paciente = pacientes.find(p => (p._id || p.IdPaciente) == idPaciente);
+            let html = `<h4><i class="fas fa-user-injured"></i> Turnos de ${paciente ? paciente.Nombre + ' ' + paciente.Apellido : 'Paciente'}:</h4>`;
+            if (result.data.length === 0) {
+              html += '<p>No hay turnos para este paciente.</p>';
+            }
             result.data.forEach(turno => {
-              const medico = medicos.find(m => m.IdMedico === turno.IdMedico);
-              html += `<p><strong>ID:</strong> ${turno.IdTurno} | <strong>Fecha:</strong> ${turno.Fecha} | <strong>Hora:</strong> ${turno.HoraInicio}-${turno.HoraFin} | <strong>Médico:</strong> ${medico ? medico.Nombre + ' ' + medico.Apellido : 'N/A'}</p>`;
+              const medico = medicos.find(m => (m._id || m.IdMedico) == turno.IdMedico);
+              const id = turno._id || turno.IdTurno;
+              html += `<p><strong>ID:</strong> ${id} | <strong>Fecha:</strong> ${new Date(turno.Fecha.replace(/-/g, '/')).toLocaleDateString('es-AR')} | <strong>Hora:</strong> ${turno.HoraInicio}-${turno.HoraFin} | <strong>Médico:</strong> ${medico ? medico.Nombre + ' ' + medico.Apellido : 'N/A'}</p>`;
             });
             showResult('read-result', html, true);
           } else {
@@ -617,11 +664,15 @@ html(lang='es')
           const result = await response.json();
           
           if (response.ok) {
-            const medico = medicos.find(m => m.IdMedico == idMedico);
-            let html = `<h4>👨‍⚕️ Turnos de ${medico ? medico.Nombre + ' ' + medico.Apellido : 'Médico'}:</h4>`;
+            const medico = medicos.find(m => (m._id || m.IdMedico) == idMedico);
+            let html = `<h4><i class="fas fa-user-md"></i> Turnos de ${medico ? medico.Nombre + ' ' + medico.Apellido : 'Médico'}:</h4>`;
+            if (result.data.length === 0) {
+              html += '<p>No hay turnos para este médico.</p>';
+            }
             result.data.forEach(turno => {
-              const paciente = pacientes.find(p => p.IdPaciente === turno.IdPaciente);
-              html += `<p><strong>ID:</strong> ${turno.IdTurno} | <strong>Fecha:</strong> ${turno.Fecha} | <strong>Hora:</strong> ${turno.HoraInicio}-${turno.HoraFin} | <strong>Paciente:</strong> ${paciente ? paciente.Nombre + ' ' + paciente.Apellido : 'N/A'}</p>`;
+              const paciente = pacientes.find(p => (p._id || p.IdPaciente) == turno.IdPaciente);
+              const id = turno._id || turno.IdTurno;
+              html += `<p><strong>ID:</strong> ${id} | <strong>Fecha:</strong> ${new Date(turno.Fecha.replace(/-/g, '/')).toLocaleDateString('es-AR')} | <strong>Hora:</strong> ${turno.HoraInicio}-${turno.HoraFin} | <strong>Paciente:</strong> ${paciente ? paciente.Nombre + ' ' + paciente.Apellido : 'N/A'}</p>`;
             });
             showResult('read-result', html, true);
           } else {
@@ -633,9 +684,11 @@ html(lang='es')
       }
 
       async function loadTurnoData() {
-        const id = document.getElementById('updateId').value;
+        // --- INICIO DEL CAMBIO ---
+        const id = document.getElementById('updateTurnoSelect').value; // Leer del dropdown
+        // --- FIN DEL CAMBIO ---
         if (!id) {
-          showResult('update-result', 'Por favor ingrese un ID', false);
+          showResult('update-result', 'Por favor seleccione un turno', false);
           return;
         }
         
@@ -661,39 +714,11 @@ html(lang='es')
         }
       }
 
-      async function loadTurnosDropdown(idSelect) {
-        try {
-          const response = await fetch('/api/turnos');
-          const result = await response.json();
-          let turnos = result.data;
-          //agrego a turnos los nombres de medicos y pacientes
-          turnos.forEach(turno => {
-            const medico = medicos.find(m => m._id === turno.IdMedico);
-            const paciente = pacientes.find(p => p._id === turno.IdPaciente);
-            turno.NombreMedico = medico ? medico.Nombre + ' ' + medico.Apellido : 'N/A';
-            turno.NombrePaciente = paciente ? paciente.Nombre + ' ' + paciente.Apellido : 'N/A';
-          });
-          console.log(turnos);
-          
-          if (response.ok) {
-            const select = document.getElementById(idSelect);
-            select.innerHTML = '<option value="">Seleccionar turno...</option>';
-            
-            turnos.forEach(turno => {
-              const option = document.createElement('option');
-              option.value = turno._id;
-              option.textContent = `${turno.Fecha} ${turno.HoraInicio}-${turno.HoraFin} ${turno.NombreMedico} - ${turno.NombrePaciente}`;
-              select.appendChild(option);
-            });
-          }
-        } catch (error) {
-          console.error('Error cargando turnos:', error);
-        }
-      }
-
       async function updateTurno(event) {
         event.preventDefault();
-        const id = document.getElementById('updateId').value;
+        // --- INICIO DEL CAMBIO ---
+        const id = document.getElementById('updateTurnoSelect').value; // Leer del dropdown
+        // --- FIN DEL CAMBIO ---
         const formData = new FormData(event.target);
         const data = {
           Fecha: formData.get('updateFecha'),
@@ -723,6 +748,7 @@ html(lang='es')
           const result = await response.json();
           if (response.ok) {
             showResult('update-result', 'Turno actualizado exitosamente', true);
+            loadTurnosDropdown('updateTurnoSelect'); // Recargar dropdown
           } else {
             showResult('update-result', `Error: ${result.message}`, false);
           }
@@ -751,6 +777,7 @@ html(lang='es')
           if (response.ok) {
             showResult('delete-result', 'Turno eliminado exitosamente', true);
             document.getElementById('deleteId').value = '';
+            loadTurnosDropdown('updateTurnoSelect'); // Recargar dropdown
           } else {
             showResult('delete-result', `Error: ${result.message}`, false);
           }
