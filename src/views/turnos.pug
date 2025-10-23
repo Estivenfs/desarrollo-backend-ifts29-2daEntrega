@@ -474,33 +474,6 @@ html(lang='es')
         });
       }
 
-      // --- INICIO DEL CAMBIO ---
-      // Nueva función para cargar el dropdown de turnos (mejorada)
-      async function loadTurnosDropdown(idSelect) {
-        try {
-          // Usamos el endpoint 'completos' para tener los nombres
-          const response = await fetch('/api/turnos/completos');
-          const result = await response.json();
-          
-          if (response.ok) {
-            const select = document.getElementById(idSelect);
-            select.innerHTML = '<option value="">Seleccionar turno...</option>';
-            
-            result.data.forEach(turno => {
-              const id = turno._id || turno.IdTurno;
-              const option = document.createElement('option');
-              option.value = id;
-              const fechaFmt = new Date(turno.Fecha.replace(/-/g, '/')).toLocaleDateString('es-AR');
-              option.textContent = `${fechaFmt} ${turno.HoraInicio} - ${turno.Paciente || 'N/A'} (Médico: ${turno.Medico || 'N/A'})`;
-              select.appendChild(option);
-            });
-          }
-        } catch (error) {
-          console.error('Error cargando turnos:', error);
-        }
-      }
-      // --- FIN DEL CAMBIO ---
-
       function showForm(formType) {
         // Ocultar todos los formularios
         const forms = document.querySelectorAll('.form-section');
@@ -618,6 +591,37 @@ html(lang='es')
           }
         } catch (error) {
           showResult('read-result', `Error de conexión: ${error.message}`, false);
+        }
+      }
+
+      async function loadTurnosDropdown(idSelect) {
+        try {
+          const response = await fetch('/api/turnos');
+          const result = await response.json();
+          let turnos = result.data;
+          //agrego a turnos los nombres de medicos y pacientes
+          turnos.forEach(turno => {
+            const medico = medicos.find(m => m._id === turno.IdMedico);
+            const paciente = pacientes.find(p => p._id === turno.IdPaciente);
+            turno.NombreMedico = medico ? medico.Nombre + ' ' + medico.Apellido : 'N/A';
+            turno.NombrePaciente = paciente ? paciente.Nombre + ' ' + paciente.Apellido : 'N/A';
+          });
+          console.log(turnos);
+
+          if (response.ok) {
+            const select = document.getElementById(idSelect);
+            select.innerHTML = '<option value="">Seleccionar turno...</option>';
+
+            turnos.forEach(turno => {
+              const option = document.createElement('option');
+              option.value = turno._id;
+              option.textContent = `${turno.Fecha} ${turno.HoraInicio}-${turno.HoraFin} ${turno.NombreMedico} - ${turno.NombrePaciente}`;
+              select.appendChild(option);
+            });
+          }
+        } catch (error) {
+          console.error('Error cargando turnos:', error);
+          showResult('update-result', `Error de conexión: ${error.message}`, false);
         }
       }
 
