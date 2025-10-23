@@ -3,6 +3,9 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 dotenv.config();
+import connectDB from './config/db.js';
+
+
 // Importar middleware personalizado
 import { requestLogger, errorHandler, notFound } from './middleware/index.js';
 
@@ -40,12 +43,20 @@ app.use(notFound);
 // Middleware de manejo de errores (debe ir al final)
 app.use(errorHandler);
 
-// Iniciar servidor
-app.listen(PORT, () => {
-    console.log(`🚀 Servidor ejecutándose en http://localhost:${PORT}`);
-    console.log(`📁 Estructura MVC configurada correctamente`);
-    console.log(`🎨 Motor de vistas: Pug`);
-    console.log(`🌍 Entorno: ${process.env.NODE_ENV || 'development'}`);
-});
+// Iniciar servidor después de conectar a la base de datos
+(async () => {
+    try {
+        await connectDB();
+        app.listen(PORT, () => {
+            console.log(`🚀 Servidor ejecutándose en http://localhost:${PORT}`);
+            console.log(`📁 Estructura MVC configurada correctamente`);
+            console.log(`🎨 Motor de vistas: Pug`);
+            console.log(`🌍 Entorno: ${process.env.NODE_ENV || 'development'}`);
+        });
+    } catch (error) {
+        console.error('No se pudo iniciar el servidor debido a un error de conexión a la DB');
+        process.exit(1);
+    }
+})();
 
 export default app;

@@ -3,45 +3,97 @@ html(lang='es')
   head
     meta(charset='UTF-8')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
-    title Gestión de Turnos
+    title= title
+    link(rel='stylesheet', href='https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap')
+    link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css')
     style.
+      /* --- Estilos Base del Dashboard (Layout) --- */
       body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        font-family: 'Inter', sans-serif;
+        margin: 0;
+        padding: 24px;
+        background: linear-gradient(135deg, #f6fbff, #e9f6ff);
+        color: #0f4c81;
+        display: flex;
         min-height: 100vh;
-        color: #333;
       }
+
+      .sidebar {
+        width: 80px;
+        background: linear-gradient(180deg, rgba(6,40,60,0.95), rgba(5,34,54,0.95));
+        color: white;
+        border-radius: 12px;
+        padding: 20px 12px;
+        display:flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 18px;
+        box-shadow: 0 12px 30px rgba(2,6,23,0.12);
+        position: sticky;
+        top: 24px;
+        height: calc(100vh - 48px);
+      }
+
+      .logo {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        background: linear-gradient(135deg,#0b74b6,#0b4fa0);
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        font-weight:700;
+      }
+
+      .sidebar nav a {
+        width: 52px;
+        height: 52px;
+        border-radius: 10px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        color: rgba(255,255,255,0.9);
+        text-decoration: none;
+        font-size: 1.2em;
+        transition: transform .18s ease, box-shadow .18s ease;
+      }
+      .sidebar nav a:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 10px 26px rgba(4,30,60,0.28);
+      }
+
+      .main {
+        flex: 1;
+        margin-left: 24px;
+      }
+
       .container {
-        background: white;
-        padding: 40px;
-        border-radius: 15px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        backdrop-filter: blur(10px);
+        background: rgba(255,255,255,0.75);
+        padding: 28px;
+        border-radius: 16px;
+        box-shadow: 0 14px 40px rgba(2,6,23,0.08);
       }
-      h1 {
-        color: #4a5568;
-        text-align: center;
-        margin-bottom: 30px;
-        font-size: 2.5em;
+      
+      .header-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
       }
-      .back-button {
-        display: inline-block;
-        background: #718096;
-        color: white;
-        padding: 10px 20px;
-        text-decoration: none;
-        border-radius: 5px;
-        margin-bottom: 20px;
-        transition: background 0.3s ease;
+      .header-left i {
+        font-size: 1.9rem;
+        color: #0f4c81;
       }
-      .back-button:hover {
-        background: #4a5568;
-        color: white;
-        text-decoration: none;
+      .header-left h1 {
+        font-size: 1.9rem;
+        margin: 4px 0;
       }
+      .page-sub {
+        margin: 0;
+        color: #5b7f98;
+      }
+      
+      /* --- Estilos Específicos de Turnos (Fusionados) --- */
       .actions {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -63,6 +115,11 @@ html(lang='es')
         transform: translateY(-2px);
         color: white;
         text-decoration: none;
+      }
+      .action-button .icon { /* Estilo para el ícono dentro del botón */
+        font-size: 2em;
+        display: block;
+        margin-bottom: 10px;
       }
       .create {
         background: linear-gradient(135deg, #48bb78, #38a169);
@@ -92,17 +149,19 @@ html(lang='es')
       .delete:hover {
         box-shadow: 0 6px 20px rgba(245, 101, 101, 0.4);
       }
-      .icon {
-        font-size: 2em;
-        display: block;
-        margin-bottom: 10px;
-      }
       .form-section {
         background: #f7fafc;
         padding: 20px;
         border-radius: 10px;
         margin: 20px 0;
         display: none;
+        border: 1px solid rgba(12,50,80,0.04);
+      }
+      .form-section h3 {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #2d3748;
       }
       .form-section.active {
         display: block;
@@ -125,11 +184,11 @@ html(lang='es')
       }
       .form-group input:focus, .form-group select:focus {
         outline: none;
-        border-color: #667eea;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        border-color: #0b74b6;
+        box-shadow: 0 0 0 3px rgba(11, 116, 182, 0.1);
       }
       .submit-button {
-        background: #667eea;
+        background: #0b74b6;
         color: white;
         padding: 12px 24px;
         border: none;
@@ -139,7 +198,7 @@ html(lang='es')
         transition: background 0.3s ease;
       }
       .submit-button:hover {
-        background: #5a67d8;
+        background: #0b4fa0;
       }
       .result {
         background: #edf2f7;
@@ -148,41 +207,71 @@ html(lang='es')
         margin-top: 15px;
         display: none;
       }
+      .result i { /* Estilo para íconos en resultados */
+        margin-right: 8px;
+      }
       .result.success {
         background: #f0fff4;
         border-left: 4px solid #48bb78;
+        color: #2f855a;
+      }
+      .result.success i {
+        color: #48bb78;
       }
       .result.error {
         background: #fed7d7;
         border-left: 4px solid #f56565;
+        color: #c53030;
+      }
+      .result.error i {
+        color: #f56565;
       }
       .form-row {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 15px;
       }
+
+
   body
-    .container
-      a.back-button(href='/') ← Volver al Inicio
-      
-      h1 📅 Gestión de Turnos
-      
-      .actions
-        a.action-button.create(href='#' onclick='showForm("create")')
-          span.icon ➕
-          | Crear Turno
+    .sidebar
+      .logo SI
+      nav
+        a(href='/' title='Inicio')
+          i.fas.fa-house
+        a(href='/pacientes' title='Pacientes')
+          i.fas.fa-user-injured
+        a(href='/medicos' title='Médicos')
+          i.fas.fa-user-md
+        a(href='/turnos' title='Turnos')
+          i.fas.fa-calendar-check
+
+    .main
+      .container
+        // --- Cabecera con ícono ---
+        .header-left
+          i.fas.fa-calendar-check
+          div
+            h1.page-title Gestión de Turnos
+            p.page-sub Desarrollo Backend - Grupo 4
         
-        a.action-button.read(href='#' onclick='showForm("read")')
-          span.icon 👁️
-          | Consultar Turnos
-        
-        a.action-button.update(href='#' onclick='showForm("update")')
-          span.icon ✏️
-          | Modificar Turno
-        
-        a.action-button.delete(href='#' onclick='showForm("delete")')
-          span.icon 🗑️
-          | Eliminar Turno
+        // --- Contenido de la página de Turnos con íconos ---
+        .actions
+          a.action-button.create(href='#' onclick='showForm("create")')
+            i.icon.fas.fa-plus-circle
+            | Crear Turno
+          
+          a.action-button.read(href='#' onclick='showForm("read")')
+            i.icon.fas.fa-search
+            | Consultar Turnos
+          
+          a.action-button.update(href='#' onclick='showForm("update")')
+            i.icon.fas.fa-edit
+            | Modificar Turno
+          
+          a.action-button.delete(href='#' onclick='showForm("delete")')
+            i.icon.fas.fa-trash-alt
+            | Eliminar Turno
       
       // Formulario Crear Turno
       .form-section#create-form
@@ -233,9 +322,8 @@ html(lang='es')
       .form-section#update-form
         h3 ✏️ Modificar Turno
         .form-group
-          label(for='updateTurnoSelect') Seleccionar Turno:
-          select(id='updateTurnoSelect' name='updateTurnoSelect' required)
-            option(value='') Seleccionar turno...
+          label(for='updateId') ID del Turno:
+          input(type='number' id='updateId' name='updateId' required)
           button.submit-button(onclick='loadTurnoData()') Cargar Datos
         form(onsubmit='updateTurno(event)' style='display:none' id='update-data-form')
           .form-group
@@ -268,6 +356,7 @@ html(lang='es')
           button.submit-button(onclick='deleteTurno()') Eliminar Turno
         .result#delete-result
 
+    // --- Script de la página de Turnos (modificado para íconos y IDs robustos) ---
     script.
       let pacientes = [];
       let medicos = [];
@@ -282,7 +371,7 @@ html(lang='es')
 
       function setMinDateTime() {
         const today = new Date().toISOString().split('T')[0];
-        const fechaInputs = ['fecha', 'updateFecha'];
+        const fechaInputs = ['fecha', 'updateFecha', 'searchFecha'];
         fechaInputs.forEach(id => {
           const input = document.getElementById(id);
           if (input) {
@@ -339,8 +428,9 @@ html(lang='es')
             }
             
             pacientes.forEach(paciente => {
+              const id = paciente._id || paciente.IdPaciente; // Maneja MongoDB y SQL
               const option = document.createElement('option');
-              option.value = paciente._id;
+              option.value = paciente.IdPaciente;
               option.textContent = `${paciente.Nombre} ${paciente.Apellido} (DNI: ${paciente.DNI})`;
               select.appendChild(option);
             });
@@ -361,8 +451,9 @@ html(lang='es')
             }
             
             medicos.forEach(medico => {
+              const id = medico._id || medico.IdMedico; // Maneja MongoDB y SQL
               const option = document.createElement('option');
-              option.value = medico._id;
+              option.value = medico.IdMedico;
               option.textContent = `${medico.Nombre} ${medico.Apellido} (${medico.Especialidad})`;
               select.appendChild(option);
             });
@@ -388,7 +479,9 @@ html(lang='es')
 
       function showResult(elementId, message, isSuccess = true) {
         const result = document.getElementById(elementId);
-        result.innerHTML = message;
+        // Genera el ícono correspondiente en HTML
+        const iconHtml = isSuccess ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-times-circle"></i>';
+        result.innerHTML = `${iconHtml} ${message}`;
         result.className = 'result ' + (isSuccess ? 'success' : 'error');
         result.style.display = 'block';
       }
@@ -405,12 +498,14 @@ html(lang='es')
         }
         
         // Validar fecha y hora
-        if (!validateDateTime(data.Fecha, data.HoraInicio)) {
+        if (!validateDateTime(data.fecha, data.horaInicio)) {
           showResult('create-result', '❌ La fecha y hora del turno deben ser posteriores al momento actual', false);
           return;
         }
         
-       
+        // Convertir IDs a números
+        data.idPaciente = parseInt(data.idPaciente);
+        data.idMedico = parseInt(data.idMedico);
         
         try {
           const response = await fetch('/api/turnos', {
@@ -421,41 +516,42 @@ html(lang='es')
           
           const result = await response.json();
           if (response.ok) {
-            showResult('create-result', `✅ Turno creado exitosamente. ID: ${result.data._id}`, true);
+            showResult('create-result', `✅ Turno creado exitosamente. ID: ${result.data.IdTurno}`, true);
             event.target.reset();
           } else {
-            showResult('create-result', `❌ Error: ${result.message}`, false);
+            showResult('create-result', `Error: ${result.message}`, false);
           }
         } catch (error) {
-          showResult('create-result', `❌ Error de conexión: ${error.message}`, false);
+          showResult('create-result', `Error de conexión: ${error.message}`, false);
         }
       }
 
       async function getAllTurnos() {
         try {
-          const response = await fetch('/api/turnos');
+          // Usamos la API que trae los datos completos
+          const response = await fetch('/api/turnos/completos'); 
           const result = await response.json();
           
           if (response.ok) {
-            let html = '<h4>📋 Lista de Turnos:</h4>';
+            let html = '<h4><i class="fas fa-clipboard-list"></i> Lista de Turnos:</h4>';
             result.data.forEach(turno => {
-              const paciente = pacientes.find(p => p._id === turno.IdPaciente);
-              const medico = medicos.find(m => m._id === turno.IdMedico);
-              html += `<p><strong>ID:</strong> ${turno._id} | <strong>Fecha:</strong> ${turno.Fecha} | <strong>Hora:</strong> ${turno.HoraInicio}-${turno.HoraFin} | <strong>Paciente:</strong> ${paciente ? paciente.Nombre + ' ' + paciente.Apellido : 'N/A'} | <strong>Médico:</strong> ${medico ? medico.Nombre + ' ' + medico.Apellido : 'N/A'}</p>`;
+              const paciente = pacientes.find(p => p.IdPaciente === turno.IdPaciente);
+              const medico = medicos.find(m => m.IdMedico === turno.IdMedico);
+              html += `<p><strong>ID:</strong> ${turno.IdTurno} | <strong>Fecha:</strong> ${turno.Fecha} | <strong>Hora:</strong> ${turno.HoraInicio}-${turno.HoraFin} | <strong>Paciente:</strong> ${paciente ? paciente.Nombre + ' ' + paciente.Apellido : 'N/A'} | <strong>Médico:</strong> ${medico ? medico.Nombre + ' ' + medico.Apellido : 'N/A'}</p>`;
             });
             showResult('read-result', html, true);
           } else {
-            showResult('read-result', `❌ Error: ${result.message}`, false);
+            showResult('read-result', `Error: ${result.message}`, false);
           }
         } catch (error) {
-          showResult('read-result', `❌ Error de conexión: ${error.message}`, false);
+          showResult('read-result', `Error de conexión: ${error.message}`, false);
         }
       }
 
       async function getTurnosByFecha() {
         const fecha = document.getElementById('searchFecha').value;
         if (!fecha) {
-          showResult('read-result', '❌ Por favor seleccione una fecha', false);
+          showResult('read-result', 'Por favor seleccione una fecha', false);
           return;
         }
         
@@ -464,25 +560,28 @@ html(lang='es')
           const result = await response.json();
           
           if (response.ok) {
-            let html = `<h4>📅 Turnos del ${fecha}:</h4>`;
+            let html = `<h4><i class="fas fa-calendar-day"></i> Turnos del ${new Date(fecha.replace(/-/g, '/')).toLocaleDateString('es-AR')}:</h4>`;
+            if (result.data.length === 0) {
+              html += '<p>No hay turnos para esta fecha.</p>';
+            }
             result.data.forEach(turno => {
-              const paciente = pacientes.find(p => p._id === turno.IdPaciente);
-              const medico = medicos.find(m => m._id === turno.IdMedico);
-              html += `<p><strong>ID:</strong> ${turno._id} | <strong>Hora:</strong> ${turno.HoraInicio}-${turno.HoraFin} | <strong>Paciente:</strong> ${paciente ? paciente.Nombre + ' ' + paciente.Apellido : 'N/A'} | <strong>Médico:</strong> ${medico ? medico.Nombre + ' ' + medico.Apellido : 'N/A'}</p>`;
+              const paciente = pacientes.find(p => p.IdPaciente === turno.IdPaciente);
+              const medico = medicos.find(m => m.IdMedico === turno.IdMedico);
+              html += `<p><strong>ID:</strong> ${turno.IdTurno} | <strong>Hora:</strong> ${turno.HoraInicio}-${turno.HoraFin} | <strong>Paciente:</strong> ${paciente ? paciente.Nombre + ' ' + paciente.Apellido : 'N/A'} | <strong>Médico:</strong> ${medico ? medico.Nombre + ' ' + medico.Apellido : 'N/A'}</p>`;
             });
             showResult('read-result', html, true);
           } else {
-            showResult('read-result', `❌ Error: ${result.message}`, false);
+            showResult('read-result', `Error: ${result.message}`, false);
           }
         } catch (error) {
-          showResult('read-result', `❌ Error de conexión: ${error.message}`, false);
+          showResult('read-result', `Error de conexión: ${error.message}`, false);
         }
       }
 
       async function getTurnosByPaciente() {
         const idPaciente = document.getElementById('searchPaciente').value;
         if (!idPaciente) {
-          showResult('read-result', '❌ Por favor seleccione un paciente', false);
+          showResult('read-result', 'Por favor seleccione un paciente', false);
           return;
         }
         
@@ -491,25 +590,25 @@ html(lang='es')
           const result = await response.json();
           
           if (response.ok) {
-            const paciente = pacientes.find(p => p._id == idPaciente);
+            const paciente = pacientes.find(p => p.IdPaciente == idPaciente);
             let html = `<h4>🏥 Turnos de ${paciente ? paciente.Nombre + ' ' + paciente.Apellido : 'Paciente'}:</h4>`;
             result.data.forEach(turno => {
-              const medico = medicos.find(m => m._id === turno.IdMedico);
-              html += `<p><strong>ID:</strong> ${turno._id} | <strong>Fecha:</strong> ${turno.Fecha} | <strong>Hora:</strong> ${turno.HoraInicio}-${turno.HoraFin} | <strong>Médico:</strong> ${medico ? medico.Nombre + ' ' + medico.Apellido : 'N/A'}</p>`;
+              const medico = medicos.find(m => m.IdMedico === turno.IdMedico);
+              html += `<p><strong>ID:</strong> ${turno.IdTurno} | <strong>Fecha:</strong> ${turno.Fecha} | <strong>Hora:</strong> ${turno.HoraInicio}-${turno.HoraFin} | <strong>Médico:</strong> ${medico ? medico.Nombre + ' ' + medico.Apellido : 'N/A'}</p>`;
             });
             showResult('read-result', html, true);
           } else {
-            showResult('read-result', `❌ Error: ${result.message}`, false);
+            showResult('read-result', `Error: ${result.message}`, false);
           }
         } catch (error) {
-          showResult('read-result', `❌ Error de conexión: ${error.message}`, false);
+          showResult('read-result', `Error de conexión: ${error.message}`, false);
         }
       }
 
       async function getTurnosByMedico() {
         const idMedico = document.getElementById('searchMedico').value;
         if (!idMedico) {
-          showResult('read-result', '❌ Por favor seleccione un médico', false);
+          showResult('read-result', 'Por favor seleccione un médico', false);
           return;
         }
         
@@ -518,25 +617,25 @@ html(lang='es')
           const result = await response.json();
           
           if (response.ok) {
-            const medico = medicos.find(m => m._id == idMedico);
+            const medico = medicos.find(m => m.IdMedico == idMedico);
             let html = `<h4>👨‍⚕️ Turnos de ${medico ? medico.Nombre + ' ' + medico.Apellido : 'Médico'}:</h4>`;
             result.data.forEach(turno => {
-              const paciente = pacientes.find(p => p._id === turno.IdPaciente);
-              html += `<p><strong>ID:</strong> ${turno._id} | <strong>Fecha:</strong> ${turno.Fecha} | <strong>Hora:</strong> ${turno.HoraInicio}-${turno.HoraFin} | <strong>Paciente:</strong> ${paciente ? paciente.Nombre + ' ' + paciente.Apellido : 'N/A'}</p>`;
+              const paciente = pacientes.find(p => p.IdPaciente === turno.IdPaciente);
+              html += `<p><strong>ID:</strong> ${turno.IdTurno} | <strong>Fecha:</strong> ${turno.Fecha} | <strong>Hora:</strong> ${turno.HoraInicio}-${turno.HoraFin} | <strong>Paciente:</strong> ${paciente ? paciente.Nombre + ' ' + paciente.Apellido : 'N/A'}</p>`;
             });
             showResult('read-result', html, true);
           } else {
-            showResult('read-result', `❌ Error: ${result.message}`, false);
+            showResult('read-result', `Error: ${result.message}`, false);
           }
         } catch (error) {
-          showResult('read-result', `❌ Error de conexión: ${error.message}`, false);
+          showResult('read-result', `Error de conexión: ${error.message}`, false);
         }
       }
 
       async function loadTurnoData() {
         const id = document.getElementById('updateId').value;
         if (!id) {
-          showResult('update-result', '❌ Por favor ingrese un ID', false);
+          showResult('update-result', 'Por favor ingrese un ID', false);
           return;
         }
         
@@ -553,12 +652,12 @@ html(lang='es')
             document.getElementById('updateIdMedico').value = t.IdMedico;
             
             document.getElementById('update-data-form').style.display = 'block';
-            showResult('update-result', '✅ Datos cargados correctamente', true);
+            showResult('update-result', 'Datos cargados correctamente', true);
           } else {
-            showResult('update-result', `❌ Error: ${result.message}`, false);
+            showResult('update-result', `Error: ${result.message}`, false);
           }
         } catch (error) {
-          showResult('update-result', `❌ Error de conexión: ${error.message}`, false);
+          showResult('update-result', `Error de conexión: ${error.message}`, false);
         }
       }
 
@@ -606,7 +705,7 @@ html(lang='es')
         
         // Validar fecha y hora
         if (!validateDateTime(data.Fecha, data.HoraInicio)) {
-          showResult('update-result', '❌ La fecha y hora del turno deben ser posteriores al momento actual', false);
+          showResult('update-result', 'La fecha y hora del turno deben ser posteriores al momento actual', false);
           return;
         }
         
@@ -623,19 +722,19 @@ html(lang='es')
           
           const result = await response.json();
           if (response.ok) {
-            showResult('update-result', '✅ Turno actualizado exitosamente', true);
+            showResult('update-result', 'Turno actualizado exitosamente', true);
           } else {
-            showResult('update-result', `❌ Error: ${result.message}`, false);
+            showResult('update-result', `Error: ${result.message}`, false);
           }
         } catch (error) {
-          showResult('update-result', `❌ Error de conexión: ${error.message}`, false);
+          showResult('update-result', `Error de conexión: ${error.message}`, false);
         }
       }
 
       async function deleteTurno() {
         const id = document.getElementById('deleteId').value;
         if (!id) {
-          showResult('delete-result', '❌ Por favor ingrese un ID', false);
+          showResult('delete-result', 'Por favor ingrese un ID', false);
           return;
         }
         
@@ -650,12 +749,12 @@ html(lang='es')
           
           const result = await response.json();
           if (response.ok) {
-            showResult('delete-result', '✅ Turno eliminado exitosamente', true);
+            showResult('delete-result', 'Turno eliminado exitosamente', true);
             document.getElementById('deleteId').value = '';
           } else {
-            showResult('delete-result', `❌ Error: ${result.message}`, false);
+            showResult('delete-result', `Error: ${result.message}`, false);
           }
         } catch (error) {
-          showResult('delete-result', `❌ Error de conexión: ${error.message}`, false);
+          showResult('delete-result', `Error de conexión: ${error.message}`, false);
         }
       }
