@@ -4,7 +4,7 @@ import medicoController from '../controllers/medicoController.js';
 const router = express.Router();
 
 // Rutas CRUD básicas
-router.get('/', medicoController.getAll);
+router.get('/',medicoController.getAll);
 router.get('/:id', medicoController.getById);
 router.post('/', medicoController.create);
 router.put('/:id', medicoController.update);

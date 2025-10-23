@@ -1,10 +1,11 @@
 import { Medico } from '../models/index.js';
+import DatabaseService from '../models/DatabaseService.js';
 
 const medicoController = {
     // GET /api/medicos - Obtener todos los médicos
     async getAll(req, res) {
         try {
-            const medicos = await Medico.getAll();
+            const medicos = await DatabaseService.getAll("medicos");
             res.status(200).json({
                 success: true,
                 data: medicos,
@@ -23,7 +24,7 @@ const medicoController = {
     async getById(req, res) {
         try {
             const { id } = req.params;
-            const medico = await Medico.getById(id);
+            const medico = await DatabaseService.getById("medicos", id);
             
             if (!medico) {
                 return res.status(404).json({
@@ -49,7 +50,7 @@ const medicoController = {
     async create(req, res) {
         try {
             const medicoData = req.body;
-            const nuevoMedico = await Medico.create(medicoData);
+            const nuevoMedico = await DatabaseService.create("medicos", medicoData);
             
             res.status(201).json({
                 success: true,
@@ -71,7 +72,7 @@ const medicoController = {
             const { id } = req.params;
             const medicoData = req.body;
             
-            const medicoActualizado = await Medico.update(id, medicoData);
+            const medicoActualizado = await DatabaseService.update("medicos", id, medicoData);
             
             res.status(200).json({
                 success: true,
@@ -98,7 +99,7 @@ const medicoController = {
     async delete(req, res) {
         try {
             const { id } = req.params;
-            const eliminado = await Medico.delete(id);
+            const eliminado = await DatabaseService.delete("medicos", id);
             
             if (!eliminado) {
                 return res.status(404).json({
@@ -124,7 +125,7 @@ const medicoController = {
     async getByDNI(req, res) {
         try {
             const { dni } = req.params;
-            const medico = await Medico.getByDNI(dni);
+            const medico = await DatabaseService.getByDNI("medicos", dni);
             
             if (!medico) {
                 return res.status(404).json({
@@ -150,7 +151,7 @@ const medicoController = {
     async getByEspecialidad(req, res) {
         try {
             const { especialidad } = req.params;
-            const medicos = await Medico.getByEspecialidad(especialidad);
+            const medicos = await DatabaseService.getByField("medicos", "Especialidad", especialidad);
             
             res.status(200).json({
                 success: true,

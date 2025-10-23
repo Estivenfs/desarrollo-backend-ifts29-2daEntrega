@@ -49,6 +49,16 @@
       "Sexo": "F",
       "ObraSocial": "Medicus",
       "NroAfiliado": "234567890"
+    },
+    {
+      "IdPaciente": 6,
+      "Nombre": "Pedro",
+      "Apellido": "Perez",
+      "DNI": "26258798",
+      "Edad": "34",
+      "Sexo": "M",
+      "ObraSocial": "SANCOR",
+      "NroAfiliado": "615684"
     }
   ],
   "medicos": [
