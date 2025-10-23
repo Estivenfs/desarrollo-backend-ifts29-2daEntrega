@@ -14,17 +14,32 @@ const router = express.Router();
 // 🟢 Dashboard principal con datos reales desde DatabaseService
 router.get('/', async (req, res) => {
   try {
-    const turnos = await DatabaseService.getAll("turnos");
-    const pacientes = await DatabaseService.getAll("pacientes");
-    const medicos = await DatabaseService.getAll("medicos");
+    const turnos = await Turno.getTurnosCompletos();
+    const pacientes = await Paciente.getAll();
+    const medicos = await Medico.getAll();
 
     // Si querés limitar la cantidad mostrada
     const ultimosTurnos = turnos.slice(-6).reverse();
     const ultimosPacientes = pacientes.slice(-6).reverse();
 
+    const turnosFormateados = ultimosTurnos.map(turno => {
+        if (!turno.Fecha) {
+            return { ...turno, fechaFormateada: 'Fecha no disp.' };
+        }
+        // Asegurarse que la fecha se interpreta correctamente como UTC
+        const fecha = new Date(turno.Fecha);
+        const dia = String(fecha.getUTCDate()).padStart(2, '0');
+        const mes = String(fecha.getUTCMonth() + 1).padStart(2, '0');
+        const anio = fecha.getUTCFullYear();
+        return {
+            ...turno,
+            fechaFormateada: `${dia}/${mes}/${anio}`
+        };
+    });
+
     res.render('index', {
       title: 'Dashboard - Clínica Salud Integral',
-      turnos: ultimosTurnos,
+      turnos: turnosFormateados,
       pacientes: ultimosPacientes,
       medicos,
       metrics: {

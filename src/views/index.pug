@@ -204,7 +204,7 @@ html(lang='es')
                 each t in turnos  
                   li              
                     // FIX 1: Formatear la fecha a dd/mm/aaaa y mostrar la hora
-                    strong= `${(t.Fecha || t.fecha) ? new Date((t.Fecha || t.fecha).replace(/-/g, '/')).toLocaleDateString('es-AR') : 'Fecha inválida'} ${t.HoraInicio || ''}`
+                    strong= `${t.fechaFormateada} ${t.HoraInicio || ''} - ${t.HoraFin || ''}`
                     br
                     // FIX 2: Usar las propiedades correctas que vienen de getTurnosCompletos()
                     span Paciente: #{t.Paciente}

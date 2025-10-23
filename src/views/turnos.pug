@@ -544,8 +544,17 @@ html(lang='es')
       async function getAllTurnos() {
         try {
           // Usamos la API que trae los datos completos
-          const response = await fetch('/api/turnos/completos'); 
+          const response = await fetch('/api/turnos'); 
           const result = await response.json();
+          console.log(result);
+
+          // Agregamos al medico y paciente los nombres correspondientes
+          result.data.forEach(turno => {
+            const medico = medicos.find(m => (m._id || m.IdMedico) == turno.IdMedico);
+            const paciente = pacientes.find(p => (p._id || p.IdPaciente) == turno.IdPaciente);
+            turno.Medico = medico ? medico.Nombre + ' ' + medico.Apellido : 'N/A';
+            turno.Paciente = paciente ? paciente.Nombre + ' ' + paciente.Apellido : 'N/A';
+          });
           
           if (response.ok) {
             let html = '<h4><i class="fas fa-clipboard-list"></i> Lista de Turnos:</h4>';
