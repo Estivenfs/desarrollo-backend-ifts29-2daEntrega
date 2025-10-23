@@ -7,15 +7,16 @@ import turnoRoutes from './turnoRoutes.js';
 import Paciente from '../models/Paciente.js';
 import Medico from '../models/Medico.js';
 import Turno from '../models/Turno.js';
+import DatabaseService from '../models/DatabaseService.js';
 
 const router = express.Router();
 
 // 🟢 Dashboard principal con datos reales desde DatabaseService
 router.get('/', async (req, res) => {
   try {
-    const turnos = await Turno.getTurnosCompletos();
-    const pacientes = await Paciente.getAll();
-    const medicos = await Medico.getAll();
+    const turnos = await DatabaseService.getAll("turnos");
+    const pacientes = await DatabaseService.getAll("pacientes");
+    const medicos = await DatabaseService.getAll("medicos");
 
     // Si querés limitar la cantidad mostrada
     const ultimosTurnos = turnos.slice(-6).reverse();
