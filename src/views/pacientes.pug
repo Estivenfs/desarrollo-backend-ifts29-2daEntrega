@@ -181,6 +181,7 @@ html(lang='es')
         border: 1px solid #cbd5e0;
         border-radius: 5px;
         font-size: 16px;
+        box-sizing: border-box; /* Añadido para consistencia de tamaño */
       }
       .form-group input:focus, .form-group select:focus {
         outline: none;
@@ -196,6 +197,8 @@ html(lang='es')
         font-size: 16px;
         cursor: pointer;
         transition: background 0.3s ease;
+        margin-top: 10px;
+        margin-bottom: 10px;
       }
       .submit-button:hover {
         background: #0b4fa0;
@@ -307,7 +310,7 @@ html(lang='es')
             i.fas.fa-search
             | Consultar Pacientes
           button.submit-button(onclick='getAllPacientes()') Ver Todos los Pacientes
-          .form-group
+          .form-group(style='margin-top: 20px;')
             label(for='searchDni') Buscar por DNI:
             input(type='text' id='searchDni' name='searchDni' placeholder='Ingrese DNI')
             button.submit-button(onclick='getPacienteByDni()') Buscar
