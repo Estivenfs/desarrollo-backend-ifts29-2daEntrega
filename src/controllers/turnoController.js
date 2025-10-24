@@ -79,7 +79,7 @@ const turnoController = {
     try {
       const { id } = req.params;
       const turnoData = req.body;
-      const valid = await Turno.validate(turnoData);
+      const valid = await Turno.createAvailable(turnoData);
 
       if (!valid.success) {
         return res.status(400).json({
