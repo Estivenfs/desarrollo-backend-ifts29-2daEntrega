@@ -127,7 +127,7 @@ const turnoController = {
   async delete(req, res) {
     try {
       const { id } = req.params;
-      const eliminado = await Turno.delete(id);
+      const eliminado = await DatabaseService.delete("turnos", id);
 
       if (!eliminado) {
         return res.status(404).json({
