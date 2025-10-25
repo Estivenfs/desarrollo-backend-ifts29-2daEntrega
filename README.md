@@ -1,6 +1,6 @@
 # Backend IFTS-29 - Sistema de Gestión Médica - Grupo 4
 
-Sistema de gestión médica con estructura MVC (Modelo-Vista-Controlador) desarrollado con Node.js, Express, ES6 Modules y Pug. Permite la administración completa de pacientes, médicos y turnos médicos.
+Sistema de gestión médica con estructura MVC (Modelo-Vista-Controlador) desarrollado con Node.js, Express, ES6 Modules, Pug y MongoDB Atlas. Permite la administración completa de pacientes, médicos y turnos médicos.
 
 ## 🚀 Instalación
 
@@ -9,12 +9,18 @@ Sistema de gestión médica con estructura MVC (Modelo-Vista-Controlador) desarr
 npm install
 ```
 
-2. Ejecutar en modo desarrollo:
+2. Configurar variables de entorno:
+Crear un archivo `.env` en la raíz del proyecto con la siguiente variable:
+```
+MONGO_URI=<Tu string de conexión a MongoDB Atlas>
+```
+
+3. Ejecutar en modo desarrollo:
 ```bash
 npm run dev
 ```
 
-3. Ejecutar en modo producción:
+4. Ejecutar en modo producción:
 ```bash
 npm start
 ```
@@ -24,9 +30,11 @@ npm start
 ```
 src/
 ├── app.js              # Archivo principal de la aplicación (ES6 modules)
+├── config/             # Configuración de la aplicación
+│   └── db.js           # Configuración de la conexión a MongoDB
 ├── models/             # Modelos de datos
 │   ├── index.js        # Exportador de modelos
-│   ├── DatabaseService.js # Servicio de base de datos JSON
+│   ├── DatabaseService.js # Servicio de base de datos (abstracción para operaciones CRUD)
 │   ├── Paciente.js     # Modelo de paciente
 │   ├── Medico.js       # Modelo de médico
 │   └── Turno.js        # Modelo de turno médico
@@ -45,10 +53,8 @@ src/
 │   ├── pacienteRoutes.js # Rutas de pacientes
 │   ├── medicoRoutes.js   # Rutas de médicos
 │   └── turnoRoutes.js    # Rutas de turnos
-├── middleware/         # Middleware personalizado
-│   └── index.js        # Middleware de logging y errores
-└── db/                 # Base de datos
-    └── db.json         # Base de datos JSON simulada
+└── middleware/         # Middleware personalizado
+    └── index.js        # Middleware de logging y errores
 ```
 
 ## 🔗 Endpoints Disponibles
@@ -120,8 +126,8 @@ curl -X POST http://localhost:3000/api/medicos \
 curl -X POST http://localhost:3000/api/turnos \
   -H "Content-Type: application/json" \
   -d '{
-    "IdPaciente": 1,
-    "IdMedico": 1,
+    "IdPaciente": "635f8f8f8f8f8f8f8f8f8f8f",
+    "IdMedico": "635f8f8f8f8f8f8f8f8f8f8f",
     "Fecha": "2024-02-15",
     "HoraInicio": "09:00",
     "HoraFin": "09:30"
@@ -132,6 +138,7 @@ curl -X POST http://localhost:3000/api/turnos \
 
 - **Node.js** - Runtime de JavaScript
 - **Express.js** - Framework web
+- **MongoDB Atlas** - Base de datos NoSQL en la nube
 - **Pug** - Motor de plantillas (anteriormente Jade)
 - **ES6 Modules** - Sistema de módulos moderno (import/export)
 - **Nodemon** - Herramienta de desarrollo para reinicio automático
@@ -143,7 +150,7 @@ curl -X POST http://localhost:3000/api/turnos \
 - ✅ **Sistema de turnos** - Validación de conflictos horarios
 - ✅ **Interfaz web intuitiva** - Desplegables con información visual
 - ✅ **Validaciones robustas** - Fechas posteriores, horarios válidos
-- ✅ **Base de datos JSON** - Persistencia de datos simulada
+- ✅ **Base de datos MongoDB** - Persistencia de datos en la nube
 - ✅ **API RESTful completa** - Operaciones CRUD para todas las entidades
 - ✅ **Búsquedas especializadas** - Por DNI, especialidad, etc.
 - ✅ **Estructura MVC organizada** - Separación clara de responsabilidades
@@ -157,6 +164,8 @@ El servidor se ejecuta por defecto en el puerto 3000. Puedes cambiarlo configura
 ```bash
 PORT=8000 npm start
 ```
+
+La conexión a la base de datos se configura a través de la variable de entorno `MONGO_URI`.
 
 ## 🏥 Funcionalidades del Sistema
 
@@ -183,16 +192,14 @@ PORT=8000 npm start
 
 Para expandir este proyecto, puedes:
 
-1. **Migrar a base de datos real** (MongoDB, PostgreSQL, MySQL)
-2. **Implementar autenticación** (JWT, sessions)
-3. **Agregar reportes médicos** y historiales clínicos
-4. **Implementar tests** (Jest, Mocha)
-5. **Agregar notificaciones** por email/SMS
-6. **Configurar variables de entorno** (.env)
-7. **Implementar logging avanzado** (Winston)
-8. **Agregar dashboard** con estadísticas
-9. **Implementar calendario visual** para turnos
-10. **Agregar sistema de roles** (admin, recepcionista, médico)
+1. **Implementar autenticación** (JWT, sessions)
+2. **Agregar reportes médicos** y historiales clínicos
+3. **Implementar tests** (Jest, Mocha)
+4. **Agregar notificaciones** por email/SMS
+5. **Implementar logging avanzado** (Winston)
+6. **Agregar dashboard** con estadísticas
+7. **Implementar calendario visual** para turnos
+8. **Agregar sistema de roles** (admin, recepcionista, médico)
 
 ## 🤝 Contribución
 
